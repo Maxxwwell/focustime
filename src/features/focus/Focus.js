@@ -1,29 +1,28 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Platform } from 'react-native';
 import { TextInput } from 'react-native-paper';
-import { RoundedButton } from '../../components/RoundedButton';
+import { RoundedButton } from '../../components/RoundButton';
+import { fontSizes, spacing } from '../../utils/sizes';
+import { colors } from '../../utils/colors';
 
 export const Focus = ({ addSubject }) => {
-  const [tmpItemm, setTmpItem] = useState(null);
+  const [tmpItemm, setTmpItem] = useState(null)
   return (
     <View style={styles.container}>
       <View style={styles.titleContainer}>
         <Text style={styles.title}>What would you like to focus on?</Text>
         <View style={styles.inputContainer}>
           <TextInput
-            style={{ flex: 1, marginRight: 20 }}
-            onSubmitEditing = {
+            style={{ flex: 1, marginRight: 20}}
+            onSubmitEditing={
               ({ nativeEvent }) => {
-              setTmpItem(nativeEvent.text);
-            }}
+                addSubject(nativeEvent.text)
+              }}
           />
-          <RoundedButton
-            size={50}
-            title = "+"
-            onPress = {() => {
-              addSubject(tmpItemm);
-            }}
-          />
+          {
+            <RoundedButton/>
+            }
+          /> */}
         </View>
       </View>
     </View>
@@ -36,16 +35,17 @@ const styles = StyleSheet.create({
   },
   titleContainer: {
     flex: 0.5,
-    padding: Platform.OS === 'android' ? 16 : 18,
+    padding: Platform.OS === 'android' ? spacing.medium : spacing.large,
     justifyContent: 'center',
   },
   title: {
-    color: 'white',
+    color: colors.white,
     fontWeight: 'bold',
-    fontSize: 24,
+    fontSize: fontSizes.large,
   },
   inputContainer: {
-    paddingTop: 20,
+    paddingTop: spacing.medium,
     flexDirection: 'row',
+    alignItems: 'center',
   },
 });
