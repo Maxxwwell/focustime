@@ -1,13 +1,18 @@
 import React, { useState } from "react";
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, Vibration, Platform } from "react-native";
 import { colors } from "../../utils/colors";
 import { Countdown } from "../../components/Countdown";
 import { spacing } from "../../utils/sizes";
 import { ProgressBar } from "react-native-paper";
 import { Timing } from "./Timing";
 import { RoundButton, StartButton } from "../../components/RoundButton";
+import { useKeepAwake } from "expo-keep-awake";
 
-export const Timer = ({ focusSubject }) => {
+
+export const Timer = ({ focusSubject, onTimerEnd }) => {
+
+    useKeepAwake();
+    const DEFAULT_TIME = 0.1;
 
     const startTimer = () => {
         console.log('Timer started');
@@ -27,7 +32,27 @@ export const Timer = ({ focusSubject }) => {
         setIsStarted(false);
     }
 
-    const [minutes, setMinutes] = useState(0.1);
+    const vibrate = () => {
+        if (Platform.OS === 'ios') {
+            const interval = setInterval(() => Vibration.vibrate(), 1000);
+            setTimeout(() => clearInterval(interval), 10000)
+        } else {
+            Vibration.vibrate(10000)
+            //vibrate for 10s
+        }
+    }
+
+    const onEnd = () => {
+        vibrate();
+        setMinutes(DEFAULT_TIME);
+        setProgress(1);
+        setIsStarted(false);
+        onTimerEnd();
+    }
+
+
+
+    const [minutes, setMinutes] = useState(DEFAULT_TIME);
     const [isStarted, setIsStarted] = useState(false);
     const [progress, setProgress] = useState(1);
 
@@ -37,7 +62,11 @@ export const Timer = ({ focusSubject }) => {
 
             <View style={styles.countdown}>
 
-                <Countdown minutes={minutes} isPaused={!isStarted} onProgress={onProgress} />
+                <Countdown minutes={minutes}
+                    isPaused={!isStarted}
+                    onProgress={onProgress}
+                    onEnd={onEnd}
+                />
             </View>
             <View style={{ paddingTop: spacing.xxl }}>
 

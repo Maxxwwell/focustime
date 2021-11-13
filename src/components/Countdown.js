@@ -11,6 +11,7 @@ export const Countdown = ({
     minutes = 0.1,
     isPaused,
     onProgress,
+    onEnd,
 }) => {
 
     const interval = React.useRef(null);
@@ -18,7 +19,8 @@ export const Countdown = ({
     const countDown = () => {
         setMillis((time) => {
             if (time === 0) {
-                //do more stuff here
+                clearInterval(interval.current);
+                onEnd();
                 return time;
             }
             const timeLeft = time - 1000;
