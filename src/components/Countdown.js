@@ -4,16 +4,17 @@ import { colors } from "../utils/colors";
 import { fontSizes, spacing } from "../utils/sizes";
 
 const minutesToMills = (min) => min * 1000 * 60;
-const formatTime = (time) => time < 10 ? '0' + time : time;
+const formatTime = (time) => time < 10 ? '0'+time : time;
 // const formatTime 
 
 export const Countdown = ({
-    minutes = 5,
+    minutes = 0.1,
     isPaused,
     onProgress,
 }) => {
 
-    const interval = React.useRef(null)
+    const interval = React.useRef(null);
+    const [millis, setMillis] = useState(null);
     const countDown = () => {
         setMillis((time) => {
             if (time === 0) {
@@ -26,19 +27,24 @@ export const Countdown = ({
         })
     }
 
-    useEffect(() => {
-        if (isPaused) {
-            return;
-        }
-        interval.current = setInterval(countDown, 1000);
-        return () => clearInterval(interval.current)
+    useEffect(()=>{
+        setMillis(minutesToMills(minutes))
+    }, [minutes])
 
-    }, [isPaused])
+  
+        useEffect(() => {
+            if (isPaused) {
+                if (interval.current) clearInterval(interval)
+                return;
+            }
+            interval.current = setInterval(countDown, 1000);
+            return () => clearInterval(interval.current)
 
-    const [millis, setMillis] = useState(minutesToMills(minutes));
+        }, [isPaused])
+
+   
     const minute = Math.floor(millis / 1000 / 60) % 60;
     const seconds = Math.floor(millis / 1000) % 60;
-
 
     return (
         <Text style={styles.text}>{formatTime(minute)}:{formatTime(seconds)}</Text>

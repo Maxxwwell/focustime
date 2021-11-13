@@ -4,6 +4,7 @@ import { colors } from "../../utils/colors";
 import { Countdown } from "../../components/Countdown";
 import { spacing } from "../../utils/sizes";
 import { ProgressBar } from "react-native-paper";
+import { Timing } from "./Timing";
 import { RoundButton, StartButton } from "../../components/RoundButton";
 
 export const Timer = ({ focusSubject }) => {
@@ -16,10 +17,17 @@ export const Timer = ({ focusSubject }) => {
         console.log('Timer stoped');
         setIsStarted(false);
     };
-    const onProgress =(progress) => {
+    const onProgress = (progress) => {
         setProgress(progress);
     }
+    const changeTime = (min) => {
+        setMinutes(min);
+        console.log(min)
+        setProgress(1);
+        setIsStarted(false);
+    }
 
+    const [minutes, setMinutes] = useState(0.1);
     const [isStarted, setIsStarted] = useState(false);
     const [progress, setProgress] = useState(1);
 
@@ -29,21 +37,25 @@ export const Timer = ({ focusSubject }) => {
 
             <View style={styles.countdown}>
 
-                <Countdown isPaused={!isStarted} onProgress={onProgress} />
+                <Countdown minutes={minutes} isPaused={!isStarted} onProgress={onProgress} />
             </View>
             <View style={{ paddingTop: spacing.xxl }}>
 
                 <Text style={styles.title}>Focusing on: </Text>
                 <Text style={styles.task}>{focusSubject} </Text>
             </View>
-            <View style={{padding: spacing.small}}>
-                <ProgressBar 
-                progress={progress}
-                color='#5E84E2'
-                style={{height: 8}}
+            <View style={{ padding: spacing.small }}>
+                <ProgressBar
+                    progress={progress}
+                    color='#5E84E2'
+                    style={{ height: 8 }}
                 />
             </View>
-            <View style ={styles.buttonWrapper}>
+            <View style={styles.buttonWrapper}>
+                <Timing onChangeTime={changeTime} />
+            </View>
+
+            <View style={styles.buttonWrapper}>
                 {isStarted ? (<RoundButton title='pause' onPress={timerStopped} />)
                     :
                     (<RoundButton title='start' onPress={startTimer} />)
@@ -77,6 +89,7 @@ const styles = StyleSheet.create({
     },
     buttonWrapper: {
         flex: 0.3,
+        flexDirection: 'row',
         padding: 10,
         justifyContent: 'center',
         alignItems: 'center',
