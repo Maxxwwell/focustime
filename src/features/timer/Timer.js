@@ -7,9 +7,10 @@ import { ProgressBar } from "react-native-paper";
 import { Timing } from "./Timing";
 import { RoundButton, StartButton } from "../../components/RoundButton";
 import { useKeepAwake } from "expo-keep-awake";
+import { TimeButton } from "../../components/TimeButton";
 
 
-export const Timer = ({ focusSubject, onTimerEnd }) => {
+export const Timer = ({ focusSubject, onTimerEnd, clearSubject }) => {
 
     useKeepAwake();
     const DEFAULT_TIME = 0.1;
@@ -52,6 +53,8 @@ export const Timer = ({ focusSubject, onTimerEnd }) => {
 
 
 
+
+
     const [minutes, setMinutes] = useState(DEFAULT_TIME);
     const [isStarted, setIsStarted] = useState(false);
     const [progress, setProgress] = useState(1);
@@ -91,8 +94,12 @@ export const Timer = ({ focusSubject, onTimerEnd }) => {
                 }
             </View>
 
+            <View style={styles.clearSubject}>
+                <TimeButton
+                    title="-"
+                    onPress={() => clearSubject()} />
 
-
+            </View>
         </View>
     );
 };
@@ -124,6 +131,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 
+    clearSubject: {
+        paddingBottom: 25,
+        paddingLeft: 25,
 
+    }
 
 })

@@ -6,14 +6,17 @@ import { Timer } from './src/features/timer/Timer';
 import { spacing } from './src/utils/sizes';
 
 export default function App() {
-  const [focusSubject, setFocusSubject] = useState('Studying');
+  const [focusSubject, setFocusSubject] = useState();
 
   return (
     <View style={styles.container}>
       {focusSubject ? (
         <Timer
           focusSubject={focusSubject}
-          onTimerEnd={() => { setFocusSubject(null); }} />
+          onTimerEnd={() => { setFocusSubject(null); }}
+          clearSubject={()=>setFocusSubject(null)}
+          
+          />
       ) : (
         <Focus addSubject={setFocusSubject} />
       )}
