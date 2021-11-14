@@ -20,7 +20,7 @@ export default function App() {
   }
 
   const onClear = () => {
-
+    setFocusHistory([]);
   }
 
   return (
@@ -41,9 +41,9 @@ export default function App() {
       ) : (
         <>
           <Focus addSubject={setFocusSubject} />
-          <FocusHistory 
-          focusHistory={focusHistory}
-          onClear={onClear}
+          <FocusHistory
+            focusHistory={focusHistory}
+            onClear={onClear}
           />
         </>
       )}
